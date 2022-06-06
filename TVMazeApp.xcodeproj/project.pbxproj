@@ -9,13 +9,14 @@
 /* Begin PBXBuildFile section */
 		653AE991284AFB97001BE834 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653AE990284AFB96001BE834 /* AppDelegate.swift */; };
 		653AE993284AFB97001BE834 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653AE992284AFB97001BE834 /* SceneDelegate.swift */; };
-		653AE995284AFB97001BE834 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653AE994284AFB97001BE834 /* ViewController.swift */; };
-		653AE998284AFB97001BE834 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 653AE996284AFB97001BE834 /* Main.storyboard */; };
 		653AE99A284AFB9A001BE834 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 653AE999284AFB9A001BE834 /* Assets.xcassets */; };
 		653AE99D284AFB9A001BE834 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 653AE99B284AFB9A001BE834 /* LaunchScreen.storyboard */; };
 		653AE9A8284AFB9B001BE834 /* TVMazeAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653AE9A7284AFB9B001BE834 /* TVMazeAppTests.swift */; };
 		653AE9B2284AFB9B001BE834 /* TVMazeAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653AE9B1284AFB9B001BE834 /* TVMazeAppUITests.swift */; };
 		653AE9B4284AFB9B001BE834 /* TVMazeAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653AE9B3284AFB9B001BE834 /* TVMazeAppUITestsLaunchTests.swift */; };
+		653AE9DB284C4356001BE834 /* ViewCode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 653AE9DA284C4356001BE834 /* ViewCode.swift */; };
+		65D9ADBB284D7AE20014EBD6 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D9ADBA284D7AE20014EBD6 /* ViewController.swift */; };
+		65D9ADBD284D7B680014EBD6 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D9ADBC284D7B680014EBD6 /* MainCoordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,8 +40,6 @@
 		653AE98D284AFB96001BE834 /* TVMazeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TVMazeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		653AE990284AFB96001BE834 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		653AE992284AFB97001BE834 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		653AE994284AFB97001BE834 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		653AE997284AFB97001BE834 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		653AE999284AFB9A001BE834 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		653AE99C284AFB9A001BE834 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		653AE99E284AFB9A001BE834 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -49,6 +48,9 @@
 		653AE9AD284AFB9B001BE834 /* TVMazeAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TVMazeAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		653AE9B1284AFB9B001BE834 /* TVMazeAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVMazeAppUITests.swift; sourceTree = "<group>"; };
 		653AE9B3284AFB9B001BE834 /* TVMazeAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVMazeAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		653AE9DA284C4356001BE834 /* ViewCode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewCode.swift; sourceTree = "<group>"; };
+		65D9ADBA284D7AE20014EBD6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		65D9ADBC284D7B680014EBD6 /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,13 +101,9 @@
 		653AE98F284AFB96001BE834 /* TVMazeApp */ = {
 			isa = PBXGroup;
 			children = (
-				653AE990284AFB96001BE834 /* AppDelegate.swift */,
-				653AE992284AFB97001BE834 /* SceneDelegate.swift */,
-				653AE994284AFB97001BE834 /* ViewController.swift */,
-				653AE996284AFB97001BE834 /* Main.storyboard */,
-				653AE999284AFB9A001BE834 /* Assets.xcassets */,
-				653AE99B284AFB9A001BE834 /* LaunchScreen.storyboard */,
-				653AE99E284AFB9A001BE834 /* Info.plist */,
+				653AE9C0284AFD54001BE834 /* Scenes */,
+				653AE9C2284AFD6C001BE834 /* System */,
+				653AE9C3284AFD85001BE834 /* Resources */,
 			);
 			path = TVMazeApp;
 			sourceTree = "<group>";
@@ -125,6 +123,35 @@
 				653AE9B3284AFB9B001BE834 /* TVMazeAppUITestsLaunchTests.swift */,
 			);
 			path = TVMazeAppUITests;
+			sourceTree = "<group>";
+		};
+		653AE9C0284AFD54001BE834 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				653AE9DA284C4356001BE834 /* ViewCode.swift */,
+				65D9ADBA284D7AE20014EBD6 /* ViewController.swift */,
+				65D9ADBC284D7B680014EBD6 /* MainCoordinator.swift */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		653AE9C2284AFD6C001BE834 /* System */ = {
+			isa = PBXGroup;
+			children = (
+				653AE990284AFB96001BE834 /* AppDelegate.swift */,
+				653AE992284AFB97001BE834 /* SceneDelegate.swift */,
+			);
+			path = System;
+			sourceTree = "<group>";
+		};
+		653AE9C3284AFD85001BE834 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				653AE999284AFB9A001BE834 /* Assets.xcassets */,
+				653AE99B284AFB9A001BE834 /* LaunchScreen.storyboard */,
+				653AE99E284AFB9A001BE834 /* Info.plist */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -233,7 +260,6 @@
 			files = (
 				653AE99D284AFB9A001BE834 /* LaunchScreen.storyboard in Resources */,
 				653AE99A284AFB9A001BE834 /* Assets.xcassets in Resources */,
-				653AE998284AFB97001BE834 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,7 +284,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				653AE995284AFB97001BE834 /* ViewController.swift in Sources */,
+				653AE9DB284C4356001BE834 /* ViewCode.swift in Sources */,
+				65D9ADBB284D7AE20014EBD6 /* ViewController.swift in Sources */,
+				65D9ADBD284D7B680014EBD6 /* MainCoordinator.swift in Sources */,
 				653AE991284AFB97001BE834 /* AppDelegate.swift in Sources */,
 				653AE993284AFB97001BE834 /* SceneDelegate.swift in Sources */,
 			);
@@ -297,14 +325,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		653AE996284AFB97001BE834 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				653AE997284AFB97001BE834 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		653AE99B284AFB9A001BE834 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -442,7 +462,6 @@
 				INFOPLIST_FILE = TVMazeApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -470,7 +489,6 @@
 				INFOPLIST_FILE = TVMazeApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
