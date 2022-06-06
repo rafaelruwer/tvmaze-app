@@ -12,7 +12,7 @@ final class TVMazeService {
             return
         }
         
-        performRequest(url: url, completion: completion) { [self] data in
+        performRequest(url: url, paginated: true, completion: completion) { [self] data in
             do {
                 let json = try JSON(data: data)
                 let shows = json.arrayValue.compactMap(responseDecoder.decodeShow(json:))
@@ -43,7 +43,7 @@ extension TVMazeService {
         return urlComponents?.url
     }
     
-    private func performRequest<T>(url: URL, completion: @escaping (Result<T, Error>) -> Void, handleData: @escaping (Data) -> Void) {
+    private func performRequest<T>(url: URL, paginated: Bool, completion: @escaping (Result<T, Error>) -> Void, handleData: @escaping (Data) -> Void) {
         URLSession.shared.dataTask(with: url) { data, urlResponse, error in
             if let error = error {
                 completion(.failure(error))
@@ -52,8 +52,13 @@ extension TVMazeService {
             
             if let httpUrlResponse = urlResponse as? HTTPURLResponse,
                !(200..<300).contains(httpUrlResponse.statusCode) {
-                let responseBody = data.flatMap { String(data: $0, encoding: .utf8) }
-                completion(.failure(TVMazeError.http(code: httpUrlResponse.statusCode, response: responseBody)))
+                if paginated, httpUrlResponse.statusCode == 404 {
+                    completion(.failure(TVMazeError.noMorePages))
+                } else {
+                    let responseBody = data.flatMap { String(data: $0, encoding: .utf8) }
+                    completion(.failure(TVMazeError.http(code: httpUrlResponse.statusCode, response: responseBody)))
+                }
+                
                 return
             }
             

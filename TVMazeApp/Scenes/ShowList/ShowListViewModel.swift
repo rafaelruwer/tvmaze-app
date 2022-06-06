@@ -9,6 +9,8 @@ class ShowListViewModel {
     var isLoading: CurrentValueSubject<Bool, Never> = .init(false)
     var loadError: CurrentValueSubject<Error?, Never> = .init(nil)
     
+    var hasMorePages: Bool = true
+    
     private var loadedShows: [Show] = []
     private var lastRequestedPage: Int = -1
     
@@ -17,10 +19,13 @@ class ShowListViewModel {
     }
     
     func loadShows() {
+        guard hasMorePages, !isLoading.value else { return }
+        
         isLoading.value = true
         loadError.value = nil
         
         lastRequestedPage += 1
+        print("requesting page", lastRequestedPage)
         
         service.listShows(page: lastRequestedPage) { [self] result in
             switch result {
@@ -28,7 +33,11 @@ class ShowListViewModel {
                 loadedShows.append(contentsOf: pageShows)
                 shows.value.append(contentsOf: pageShows.map(ShowCellViewModel.init(show:)))
             case .failure(let error):
-                loadError.value = error
+                if case TVMazeError.noMorePages = error {
+                    hasMorePages = false
+                } else {
+                    loadError.value = error
+                }
             }
             
             isLoading.value = false
@@ -38,25 +47,9 @@ class ShowListViewModel {
     func reloadShows() {
         shows.value = []
         lastRequestedPage = -1
+        hasMorePages = true
         
         loadShows()
     }
     
-}
-
-struct ShowCellViewModel {
-    
-    private let show: Show
-    
-    init(show: Show) {
-        self.show = show
-    }
-    
-    var posterUrl: URL {
-        show.poster.thumbnail
-    }
-    
-    var title: String {
-        show.title
-    }
 }

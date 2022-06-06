@@ -43,7 +43,7 @@ class ShowCell: UITableViewCell, ViewCode, Reusable {
     }
     
     func configureViews() {
-        backgroundConfiguration = UIBackgroundConfiguration.clear()
+        backgroundConfiguration = .clear()
         
         containerStackView.axis = .horizontal
         containerStackView.distribution = .fill

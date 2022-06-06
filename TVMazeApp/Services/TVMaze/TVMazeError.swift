@@ -1,6 +1,8 @@
 
 enum TVMazeError: Error {
-    case `internal`
+    case noMorePages
+    
     case http(code: Int, response: String?)
+    case `internal`
     case unexpected
 }

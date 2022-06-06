@@ -16,6 +16,11 @@ class ShowListViewController: UIViewController, ViewCode {
     private let errorContainerView = UIView()
     private let errorLabel = UILabel()
     
+    // MARK: - Constraints
+    
+    private var errorContainerTopConstraint: NSLayoutConstraint!
+    private var errorContainerBottomConstraint: NSLayoutConstraint!
+    
     // MARK: - Initializers
     
     init(viewModel: ShowListViewModel) {
@@ -49,6 +54,9 @@ class ShowListViewController: UIViewController, ViewCode {
         errorContainerView.translatesAutoresizingMaskIntoConstraints = false
         errorLabel.translatesAutoresizingMaskIntoConstraints = false
         
+        errorContainerTopConstraint = errorContainerView.topAnchor.constraint(equalTo: view.bottomAnchor)
+        errorContainerBottomConstraint = errorContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
@@ -62,7 +70,7 @@ class ShowListViewController: UIViewController, ViewCode {
             emptyStateLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             emptyStateLabel.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
             
-            errorContainerView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            errorContainerTopConstraint,
             errorContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             errorContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
@@ -87,7 +95,8 @@ class ShowListViewController: UIViewController, ViewCode {
         tableView.refreshControl = UIRefreshControl()
         tableView.refreshControl?.addTarget(self, action: #selector(didPullToRefresh), for: .primaryActionTriggered)
         
-        tableView.register(ShowCell.self, forCellReuseIdentifier: ShowCell.identifier)
+        tableView.register(cell: ShowCell.self)
+        tableView.register(cell: LoadingCell.self)
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -104,7 +113,7 @@ class ShowListViewController: UIViewController, ViewCode {
     func configureSubscriptions() {
         viewModel.isLoading.receive(on: DispatchQueue.main)
             .sink { [self] isLoading in
-                if isLoading {
+                if isLoading && viewModel.shows.value.isEmpty {
                     tableView.isHidden = true
                     loadingIndicator.startAnimating()
                     loadingIndicator.isHidden = false
@@ -120,24 +129,23 @@ class ShowListViewController: UIViewController, ViewCode {
         viewModel.loadError.receive(on: DispatchQueue.main)
             .handleEvents(receiveOutput: { [self] error in
                 if let error = error {
-                    errorContainerView.isHidden = false
                     errorLabel.text = "\(error)"
-                } else {
-                    errorContainerView.isHidden = true
                 }
+                
+                toggleErrorView(hidden: error == nil)
             })
             // hide errorContainerView 5 seconds after displaying
             .debounce(for: 5, scheduler: DispatchQueue.main)
             .sink { [self] error in
                 if error != nil {
-                    errorContainerView.isHidden = true
+                    toggleErrorView(hidden: true)
                 }
             }
             .store(in: &subscriptions)
         
         viewModel.shows.receive(on: DispatchQueue.main)
             .sink { [self] shows in
-                emptyStateLabel.isHidden = !shows.isEmpty
+                emptyStateLabel.isHidden = !shows.isEmpty || viewModel.isLoading.value
                 tableView.reloadData()
             }
             .store(in: &subscriptions)
@@ -155,20 +163,45 @@ class ShowListViewController: UIViewController, ViewCode {
     @objc private func didPullToRefresh() {
         viewModel.reloadShows()
     }
+    
+    // MARK: - Error view
+    
+    func toggleErrorView(hidden: Bool) {
+        if hidden {
+            errorContainerBottomConstraint.isActive = false
+            errorContainerTopConstraint.isActive = true
+        } else {
+            errorContainerTopConstraint.isActive = false
+            errorContainerBottomConstraint.isActive = true
+        }
+        
+        UIView.animate(withDuration: 0.5) {
+            self.view.layoutIfNeeded()
+        }
+    }
 }
 
 // MARK: - UITableViewDataSource
 extension ShowListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.shows.value.count
+        viewModel.shows.value.count + (viewModel.hasMorePages ? 1 : 0)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cellViewModel = viewModel.shows.value[indexPath.row]
+        let totalRows = tableView.numberOfRows(inSection: indexPath.section)
         
-        let cell: ShowCell = tableView.dequeueCell(for: indexPath)
-        cell.configure(viewModel: cellViewModel)
-        return cell
+        if indexPath.row == totalRows - 1 {
+            // loading indicator
+            let cell: LoadingCell = tableView.dequeueCell(for: indexPath)
+            cell.animate()
+            return cell
+        } else {
+            let cellViewModel = viewModel.shows.value[indexPath.row]
+            
+            let cell: ShowCell = tableView.dequeueCell(for: indexPath)
+            cell.configure(viewModel: cellViewModel)
+            return cell
+        }
     }
 }
 
@@ -178,5 +211,14 @@ extension ShowListViewController: UITableViewDelegate {
         print("selected", indexPath)
         
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        guard viewModel.hasMorePages else { return }
+        
+        let totalRows = tableView.numberOfRows(inSection: indexPath.section)
+        guard totalRows - indexPath.row <= 5 else { return }
+        
+        viewModel.loadShows()
     }
 }
