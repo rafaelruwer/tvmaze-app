@@ -9,7 +9,11 @@ final class MainCoordinator {
     }
     
     func start() {
-        window.rootViewController = ViewController()
+        let service = TVMazeService()
+        let viewModel = ShowListViewModel(service: service)
+        let viewController = ShowListViewController(viewModel: viewModel)
+        
+        window.rootViewController = viewController
         window.makeKeyAndVisible()
     }
     
