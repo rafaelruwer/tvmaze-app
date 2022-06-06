@@ -104,57 +104,57 @@ class ShowListViewController: UIViewController, ViewCode {
         emptyStateLabel.numberOfLines = 0
         emptyStateLabel.textAlignment = .center
         emptyStateLabel.textColor = .secondaryLabel
-        emptyStateLabel.text = "Failed to load shows. Pull down to try again."
+        emptyStateLabel.text = "Failed to load shows.\nPull down to try again."
         
         errorContainerView.backgroundColor = .systemRed
+        errorLabel.numberOfLines = 0
         errorLabel.textColor = .white
     }
     
-    func configureSubscriptions() {
-        viewModel.isLoading.receive(on: DispatchQueue.main)
-            .sink { [self] isLoading in
-                if isLoading && viewModel.shows.value.isEmpty {
-                    tableView.isHidden = true
-                    loadingIndicator.startAnimating()
-                    loadingIndicator.isHidden = false
-                } else {
-                    tableView.isHidden = false
-                    loadingIndicator.isHidden = true
-                    loadingIndicator.stopAnimating()
-                    tableView.refreshControl?.endRefreshing()
-                }
-            }
-            .store(in: &subscriptions)
+    func updateView() {
+        if viewModel.isPerformingInitialLoad {
+            // hide everything and show only activity indicator
+            tableView.isHidden = true
+            emptyStateLabel.isHidden = true
+            toggleErrorView(hidden: true)
+            
+            loadingIndicator.startAnimating()
+            loadingIndicator.isHidden = false
+            
+            return
+        } else {
+            loadingIndicator.stopAnimating()
+            loadingIndicator.isHidden = true
+            
+            tableView.isHidden = false
+        }
         
-        viewModel.loadError.receive(on: DispatchQueue.main)
-            .handleEvents(receiveOutput: { [self] error in
-                if let error = error {
-                    errorLabel.text = "\(error)"
-                }
-                
-                toggleErrorView(hidden: error == nil)
-            })
-            // hide errorContainerView 5 seconds after displaying
-            .debounce(for: 5, scheduler: DispatchQueue.main)
-            .sink { [self] error in
-                if error != nil {
-                    toggleErrorView(hidden: true)
-                }
-            }
-            .store(in: &subscriptions)
+        if viewModel.shows.isEmpty {
+            emptyStateLabel.isHidden = false
+        } else {
+            emptyStateLabel.isHidden = true
+            tableView.reloadData()
+        }
         
-        viewModel.shows.receive(on: DispatchQueue.main)
-            .sink { [self] shows in
-                emptyStateLabel.isHidden = !shows.isEmpty || viewModel.isLoading.value
-                tableView.reloadData()
+        if let error = viewModel.lastLoadError {
+            errorLabel.text = error.localizedDescription
+            toggleErrorView(hidden: false)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                self.toggleErrorView(hidden: true)
             }
-            .store(in: &subscriptions)
+        }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureSubscriptions()
+        viewModel.update.receive(on: DispatchQueue.main)
+            .prepend(())
+            .sink { _ in
+                self.updateView()
+            }
+            .store(in: &subscriptions)
+        
         viewModel.loadShows()
     }
     
@@ -167,6 +167,9 @@ class ShowListViewController: UIViewController, ViewCode {
     // MARK: - Error view
     
     func toggleErrorView(hidden: Bool) {
+        // avoid unneeded updates
+        guard errorContainerTopConstraint.isActive != hidden else { return }
+        
         if hidden {
             errorContainerBottomConstraint.isActive = false
             errorContainerTopConstraint.isActive = true
@@ -184,7 +187,7 @@ class ShowListViewController: UIViewController, ViewCode {
 // MARK: - UITableViewDataSource
 extension ShowListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.shows.value.count + (viewModel.hasMorePages ? 1 : 0)
+        viewModel.shows.count + (viewModel.hasMorePages ? 1 : 0)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -196,7 +199,7 @@ extension ShowListViewController: UITableViewDataSource {
             cell.animate()
             return cell
         } else {
-            let cellViewModel = viewModel.shows.value[indexPath.row]
+            let cellViewModel = viewModel.shows[indexPath.row]
             
             let cell: ShowCell = tableView.dequeueCell(for: indexPath)
             cell.configure(viewModel: cellViewModel)

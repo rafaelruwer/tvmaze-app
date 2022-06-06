@@ -63,7 +63,7 @@ extension TVMazeService {
             }
             
             guard let data = data else {
-                completion(.failure(TVMazeError.unexpected))
+                completion(.failure(TVMazeError.internal))
                 return
             }
             
