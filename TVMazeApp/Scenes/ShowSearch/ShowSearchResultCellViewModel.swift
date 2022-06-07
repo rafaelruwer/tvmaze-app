@@ -8,6 +8,10 @@ struct ShowSearchResultCellViewModel {
         self.show = show
     }
     
+    var posterUrl: URL {
+        show.poster.thumbnail
+    }
+    
     var title: String {
         show.title
     }

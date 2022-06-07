@@ -51,7 +51,7 @@ class ShowSearchViewController: UIViewController, ViewCode {
         tableView.backgroundColor = .clear
         tableView.sectionHeaderTopPadding = 0
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 50
+        tableView.estimatedRowHeight = 130
         
         tableView.register(cell: ShowSearchResultCell.self)
         

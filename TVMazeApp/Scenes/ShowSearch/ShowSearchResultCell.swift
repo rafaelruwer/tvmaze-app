@@ -1,16 +1,15 @@
 import UIKit
+import Kingfisher
 
 class ShowSearchResultCell: UITableViewCell, ViewCode, Reusable {
     
     // MARK: Views
     
     private let containerStackView = UIStackView()
+    private let posterImageView = UIImageView()
+    private let labelsStackView = UIStackView()
     private let titleLabel = UILabel()
-    private let airDateStackView = UIStackView()
-    private let airDateIconView = UIImageView()
     private let airDateLabel = UILabel()
-    private let infoStackView = UIStackView()
-    private let infoIconView = UIImageView()
     private let infoLabel = UILabel()
     
     // MARK: - UI Components
@@ -42,30 +41,42 @@ class ShowSearchResultCell: UITableViewCell, ViewCode, Reusable {
     
     func buildHierarchy() {
         contentView.addSubview(containerStackView)
+        containerStackView.addArrangedSubview(posterImageView)
+        containerStackView.addArrangedSubview(labelsStackView)
         
-        containerStackView.addArrangedSubview(titleLabel)
-        containerStackView.addArrangedSubview(airDateLabel)
-        containerStackView.addArrangedSubview(infoLabel)
+        labelsStackView.addArrangedSubview(titleLabel)
+        labelsStackView.addArrangedSubview(airDateLabel)
+        labelsStackView.addArrangedSubview(infoLabel)
     }
     
     func setupConstraints() {
         containerStackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let posterHeight = posterImageView.heightAnchor.constraint(equalToConstant: 78)
+        posterHeight.priority = .init(rawValue: 999)
         
         NSLayoutConstraint.activate([
             containerStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
             containerStackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
             containerStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             containerStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            
+            posterImageView.widthAnchor.constraint(equalTo: posterImageView.heightAnchor, multiplier: 2/3),
+            posterHeight
         ])
     }
     
     func configureViews() {
-        containerStackView.axis = .vertical
+        containerStackView.axis = .horizontal
         containerStackView.distribution = .fill
-        containerStackView.alignment = .leading
+        containerStackView.alignment = .fill
+        containerStackView.spacing = 8
         
-        containerStackView.setCustomSpacing(8, after: titleLabel)
-        containerStackView.setCustomSpacing(5, after: airDateLabel)
+        labelsStackView.axis = .vertical
+        labelsStackView.distribution = .fill
+        labelsStackView.alignment = .leading
+        labelsStackView.setCustomSpacing(8, after: titleLabel)
+        labelsStackView.setCustomSpacing(4, after: airDateLabel)
         
         titleLabel.numberOfLines = 0
         titleLabel.font = .systemFont(ofSize: 20, weight: .semibold)
@@ -76,6 +87,7 @@ class ShowSearchResultCell: UITableViewCell, ViewCode, Reusable {
     // MARK: - Configuration
     
     func configure(viewModel: ShowSearchResultCellViewModel) {
+        posterImageView.kf.setImage(with: viewModel.posterUrl)
         titleLabel.text = viewModel.title
         
         // airDateLabel text
