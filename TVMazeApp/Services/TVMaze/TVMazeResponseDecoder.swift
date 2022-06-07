@@ -1,9 +1,18 @@
+import Foundation
 import SwiftyJSON
 
 class TVMazeResponseDecoder {
     
+    private static var dateFormatter: DateFormatter = {
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd"
+        return df
+    }()
+    
     func decodeShow(json: JSON) -> Show? {
-        guard let id = json["id"].int, let title = json["name"].string else {
+        guard let id = json["id"].int,
+              let title = json["name"].string,
+              let poster = decodeImageRef(json: json["image"]) else {
             return nil
         }
         
@@ -13,15 +22,18 @@ class TVMazeResponseDecoder {
                                 days: json["schedule"]["days"].arrayValue.map(\.stringValue))
         let isValidSchedule = !schedule.time.isEmpty || !schedule.days.isEmpty
         
-        guard let poster = decodeImageRef(json: json["image"]) else {
-            return nil
-        }
+        let network = json["network"]["name"].string ?? json["webChannel"]["name"].string ?? ""
+        let releaseDate = Self.dateFormatter.date(from: json["premiered"].stringValue)
+        let endDate = Self.dateFormatter.date(from: json["ended"].stringValue)
         
         return Show(id: id,
                     title: title,
                     summary: json["summary"].stringValue,
                     genres: json["genres"].arrayValue.compactMap(\.string),
                     schedule: isValidSchedule ? schedule : nil,
+                    network: network,
+                    releaseDate: releaseDate ?? Date(),
+                    endDate: endDate,
                     poster: poster)
     }
     
