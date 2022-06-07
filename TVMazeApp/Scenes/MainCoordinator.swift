@@ -24,10 +24,18 @@ final class MainCoordinator {
         window.makeKeyAndVisible()
     }
     
+    func showDetails(show: Show) {
+        let viewModel = ShowDetailViewModel(show: show)
+        let viewController = ShowDetailViewController(viewModel: viewModel)
+        
+        navigationController.pushViewController(viewController, animated: true)
+    }
+    
     private func getShowList() -> UIViewController {
         let service = TVMazeService()
         let viewModel = ShowListViewModel(service: service)
         let viewController = ShowListViewController(viewModel: viewModel)
+        viewController.coordinator = self
         
         // search
         let searchResultsController = getShowSearch()
@@ -44,6 +52,7 @@ final class MainCoordinator {
         let service = TVMazeService()
         let viewModel = ShowSearchViewModel(service: service)
         let viewController = ShowSearchViewController(viewModel: viewModel)
+        viewController.coordinator = self
         
         return viewController
     }

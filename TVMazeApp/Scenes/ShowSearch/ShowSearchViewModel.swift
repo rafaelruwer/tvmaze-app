@@ -8,12 +8,13 @@ class ShowSearchViewModel {
     let update: PassthroughSubject<Void, Never> = .init()
     var shows: [ShowSearchCellViewModel] = []
     
+    var showModels: [Show] { searchedShows }
+    
     // MARK: Private Properties
     
     private let service: TVMazeService
     private var searchQuery: CurrentValueSubject<String, Never> = .init("")
     private var searchedShows: [Show] = []
-    
     private var searchSubscription: AnyCancellable?
     
     // MARK: - Initializer

@@ -5,6 +5,8 @@ class ShowSearchViewController: UIViewController, ViewCode {
     
     // MARK: Properties
     
+    var coordinator: MainCoordinator?
+    
     private let viewModel: ShowSearchViewModel
     private var viewModelSubscription: AnyCancellable?
     
@@ -88,7 +90,8 @@ extension ShowSearchViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension ShowSearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("selected", indexPath)
+        let show = viewModel.showModels[indexPath.row]
+        coordinator?.showDetails(show: show)
         
         tableView.deselectRow(at: indexPath, animated: true)
     }

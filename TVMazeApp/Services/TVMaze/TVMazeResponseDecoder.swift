@@ -31,6 +31,7 @@ class TVMazeResponseDecoder {
                     summary: json["summary"].stringValue,
                     genres: json["genres"].arrayValue.compactMap(\.string),
                     schedule: isValidSchedule ? schedule : nil,
+                    runtime: json["runtime"].intValue,
                     network: network,
                     releaseDate: releaseDate ?? Date(),
                     endDate: endDate,

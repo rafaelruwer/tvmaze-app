@@ -5,7 +5,9 @@ class ShowListViewController: UIViewController, ViewCode {
     
     // MARK: Properties
     
-    let viewModel: ShowListViewModel
+    var coordinator: MainCoordinator?
+    
+    private let viewModel: ShowListViewModel
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - Views
@@ -211,7 +213,8 @@ extension ShowListViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension ShowListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("selected", indexPath)
+        let show = viewModel.showModels[indexPath.row]
+        coordinator?.showDetails(show: show)
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
