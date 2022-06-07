@@ -6,7 +6,7 @@ class ShowSearchViewModel {
     // MARK: Properties
     
     let update: PassthroughSubject<Void, Never> = .init()
-    var shows: [ShowSearchResultCellViewModel] = []
+    var shows: [ShowSearchCellViewModel] = []
     
     // MARK: Private Properties
     
@@ -41,7 +41,7 @@ class ShowSearchViewModel {
                     switch result {
                     case .success(let queriedShows):
                         searchedShows = queriedShows
-                        shows = queriedShows.map(ShowSearchResultCellViewModel.init(show:))
+                        shows = queriedShows.map(ShowSearchCellViewModel.init(show:))
                     case .failure:
                         searchedShows = []
                         shows = []

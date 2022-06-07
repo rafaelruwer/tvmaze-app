@@ -53,7 +53,7 @@ class ShowSearchViewController: UIViewController, ViewCode {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 130
         
-        tableView.register(cell: ShowSearchResultCell.self)
+        tableView.register(cell: ShowSearchCell.self)
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -79,7 +79,7 @@ extension ShowSearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cellViewModel = viewModel.shows[indexPath.row]
         
-        let cell: ShowSearchResultCell = tableView.dequeueCell(for: indexPath)
+        let cell: ShowSearchCell = tableView.dequeueCell(for: indexPath)
         cell.configure(viewModel: cellViewModel)
         return cell
     }

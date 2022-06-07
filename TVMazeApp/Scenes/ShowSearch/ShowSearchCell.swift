@@ -1,7 +1,7 @@
 import UIKit
 import Kingfisher
 
-class ShowSearchResultCell: UITableViewCell, ViewCode, Reusable {
+class ShowSearchCell: UITableViewCell, ViewCode, Reusable {
     
     // MARK: Views
     
@@ -97,7 +97,7 @@ class ShowSearchResultCell: UITableViewCell, ViewCode, Reusable {
     
     // MARK: - Configuration
     
-    func configure(viewModel: ShowSearchResultCellViewModel) {
+    func configure(viewModel: ShowSearchCellViewModel) {
         posterImageView.kf.setImage(with: viewModel.posterUrl)
         titleLabel.text = viewModel.title
         airDateLabel.text = viewModel.airDate

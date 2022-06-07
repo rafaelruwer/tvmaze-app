@@ -1,6 +1,6 @@
 import Foundation
 
-struct ShowSearchResultCellViewModel {
+struct ShowSearchCellViewModel {
     
     private let show: Show
     
