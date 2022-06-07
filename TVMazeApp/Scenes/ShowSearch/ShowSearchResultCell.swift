@@ -64,6 +64,7 @@ class ShowSearchResultCell: UITableViewCell, ViewCode, Reusable {
             
             airDateIconView.widthAnchor.constraint(equalTo: airDateIconView.heightAnchor),
             airDateIconView.widthAnchor.constraint(equalToConstant: 16),
+            
             infoIconView.widthAnchor.constraint(equalTo: infoIconView.heightAnchor),
             infoIconView.widthAnchor.constraint(equalToConstant: 16)
         ])

@@ -17,19 +17,23 @@ struct ShowCellViewModel {
     }
     
     var yearsActive: String {
-        "2011-2020"
+        FormatterUtils.formatYearsActive(releaseDate: show.releaseDate, endDate: show.endDate)
     }
     
     var schedule: String {
-        "Thu, 10pm"
+        if let schedule = show.schedule {
+            return FormatterUtils.formatSchedule(schedule)
+        } else {
+            return "N/A"
+        }
     }
     
     var network: String {
-        "CBS"
+        show.network
     }
     
     var rating: String {
-        "6.8"
+        show.rating?.formatted() ?? "N/A"
     }
     
 }
