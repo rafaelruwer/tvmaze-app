@@ -16,4 +16,20 @@ struct ShowCellViewModel {
         show.title
     }
     
+    var yearsActive: String {
+        "2011-2020"
+    }
+    
+    var schedule: String {
+        "Thu, 10pm"
+    }
+    
+    var network: String {
+        "CBS"
+    }
+    
+    var rating: String {
+        "6.8"
+    }
+    
 }
