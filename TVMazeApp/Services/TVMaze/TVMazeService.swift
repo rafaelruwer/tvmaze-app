@@ -13,19 +13,38 @@ final class TVMazeService {
         }
         
         performRequest(url: url, paginated: true, completion: completion) { [self] data in
-            do {
-                let json = try JSON(data: data)
-                let shows = json.arrayValue.compactMap(responseDecoder.decodeShow(json:))
-                completion(.success(shows))
-            } catch {
-                completion(.failure(error))
+            DispatchQueue.global().asyncAfter(deadline: .now() + 3) {
+                if page % 2 == 0 && page != 0 {
+                    completion(.failure(TVMazeError.internal))
+                    return
+                }
+                
+                do {
+                    let json = try JSON(data: data)
+                    let shows = json.arrayValue.compactMap(responseDecoder.decodeShow(json:))
+                    completion(.success(shows))
+                } catch {
+                    completion(.failure(error))
+                }
             }
         }
     }
     
     func searchShows(query: String, completion: @escaping (Result<[Show], Error>) -> Void) {
-        // TODO: missing implementation
-        fatalError()
+        guard let url = buildUrl(path: "search/shows", query: ["q": query]) else {
+            completion(.failure(TVMazeError.internal))
+            return
+        }
+        
+        performRequest(url: url, paginated: false, completion: completion) { [self] data in
+            do {
+                let json = try JSON(data: data)
+                let shows = json.arrayValue.map { $0["show"] }.compactMap(responseDecoder.decodeShow(json:))
+                completion(.success(shows))
+            } catch {
+                completion(.failure(error))
+            }
+        }
     }
     
     func listEpisodes(ofShow showId: Int, completion: @escaping (Result<[Episode], Error>) -> Void) {
