@@ -1,6 +1,6 @@
 import Foundation
 
-struct ShowCellViewModel {
+struct ShowSearchCellViewModel {
     
     private let show: Show
     
@@ -16,24 +16,16 @@ struct ShowCellViewModel {
         show.title
     }
     
-    var yearsActive: String {
+    var airDate: String {
         FormatterUtils.formatYearsActive(releaseDate: show.releaseDate, endDate: show.endDate)
     }
     
-    var schedule: String {
+    var info: String {
         if let schedule = show.schedule {
-            return FormatterUtils.formatSchedule(schedule)
+            return "\(FormatterUtils.formatSchedule(schedule)) @ \(show.network)"
         } else {
-            return "N/A"
+            return show.network
         }
-    }
-    
-    var network: String {
-        show.network
-    }
-    
-    var rating: String {
-        show.rating?.formatted() ?? "N/A"
     }
     
 }

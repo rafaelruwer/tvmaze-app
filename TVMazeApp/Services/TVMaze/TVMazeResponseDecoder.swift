@@ -34,6 +34,7 @@ class TVMazeResponseDecoder {
                     network: network,
                     releaseDate: releaseDate ?? Date(),
                     endDate: endDate,
+                    rating: json["rating"]["average"].double,
                     poster: poster)
     }
     

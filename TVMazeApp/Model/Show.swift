@@ -10,6 +10,7 @@ struct Show: Equatable {
     let network: String
     let releaseDate: Date
     let endDate: Date?
+    let rating: Double?
     
     let poster: ImageRef
     

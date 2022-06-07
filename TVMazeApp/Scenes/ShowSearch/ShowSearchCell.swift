@@ -1,7 +1,7 @@
 import UIKit
 import Kingfisher
 
-class ShowSearchResultCell: UITableViewCell, ViewCode, Reusable {
+class ShowSearchCell: UITableViewCell, ViewCode, Reusable {
     
     // MARK: Views
     
@@ -63,9 +63,10 @@ class ShowSearchResultCell: UITableViewCell, ViewCode, Reusable {
             posterHeight,
             
             airDateIconView.widthAnchor.constraint(equalTo: airDateIconView.heightAnchor),
-            airDateIconView.widthAnchor.constraint(equalToConstant: 16),
+            airDateIconView.widthAnchor.constraint(equalToConstant: 20),
+            
             infoIconView.widthAnchor.constraint(equalTo: infoIconView.heightAnchor),
-            infoIconView.widthAnchor.constraint(equalToConstant: 16)
+            infoIconView.widthAnchor.constraint(equalToConstant: 20)
         ])
     }
     
@@ -85,18 +86,18 @@ class ShowSearchResultCell: UITableViewCell, ViewCode, Reusable {
         airDateStackView.spacing = 4
         airDateIconView.image = UIImage(systemName: "calendar")?
             .withTintColor(.black, renderingMode: .alwaysOriginal)
-        airDateLabel.font = .systemFont(ofSize: 13, weight: .regular)
+        airDateLabel.font = .systemFont(ofSize: 14, weight: .regular)
         
         infoStackView.axis = .horizontal
         infoStackView.spacing = 4
         infoIconView.image = UIImage(systemName: "info.circle")?
             .withTintColor(.black, renderingMode: .alwaysOriginal)
-        infoLabel.font = .systemFont(ofSize: 13, weight: .regular)
+        infoLabel.font = .systemFont(ofSize: 14, weight: .regular)
     }
     
     // MARK: - Configuration
     
-    func configure(viewModel: ShowSearchResultCellViewModel) {
+    func configure(viewModel: ShowSearchCellViewModel) {
         posterImageView.kf.setImage(with: viewModel.posterUrl)
         titleLabel.text = viewModel.title
         airDateLabel.text = viewModel.airDate
