@@ -9,22 +9,14 @@ class ShowSearchResultCell: UITableViewCell, ViewCode, Reusable {
     private let posterImageView = UIImageView()
     private let labelsStackView = UIStackView()
     private let titleLabel = UILabel()
+    
+    private let airDateStackView = UIStackView()
+    private let airDateIconView = UIImageView()
     private let airDateLabel = UILabel()
+    
+    private let infoStackView = UIStackView()
+    private let infoIconView = UIImageView()
     private let infoLabel = UILabel()
-    
-    // MARK: - UI Components
-    
-    private lazy var calendarIconString: NSAttributedString = {
-        let calendarIcon = UIImage(systemName: "calendar")
-        let calendarAttachment = NSTextAttachment(image: calendarIcon ?? UIImage())
-        return NSAttributedString(attachment: calendarAttachment)
-    }()
-    
-    private lazy var infoIconString: NSAttributedString = {
-        let infoIcon = UIImage(systemName: "info.circle")
-        let infoAttachment = NSTextAttachment(image: infoIcon ?? UIImage())
-        return NSAttributedString(attachment: infoAttachment)
-    }()
     
     // MARK: - Initializers
     
@@ -45,8 +37,14 @@ class ShowSearchResultCell: UITableViewCell, ViewCode, Reusable {
         containerStackView.addArrangedSubview(labelsStackView)
         
         labelsStackView.addArrangedSubview(titleLabel)
-        labelsStackView.addArrangedSubview(airDateLabel)
-        labelsStackView.addArrangedSubview(infoLabel)
+        labelsStackView.addArrangedSubview(airDateStackView)
+        labelsStackView.addArrangedSubview(infoStackView)
+        
+        airDateStackView.addArrangedSubview(airDateIconView)
+        airDateStackView.addArrangedSubview(airDateLabel)
+        
+        infoStackView.addArrangedSubview(infoIconView)
+        infoStackView.addArrangedSubview(infoLabel)
     }
     
     func setupConstraints() {
@@ -62,25 +60,37 @@ class ShowSearchResultCell: UITableViewCell, ViewCode, Reusable {
             containerStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
             posterImageView.widthAnchor.constraint(equalTo: posterImageView.heightAnchor, multiplier: 2/3),
-            posterHeight
+            posterHeight,
+            
+            airDateIconView.widthAnchor.constraint(equalTo: airDateIconView.heightAnchor),
+            airDateIconView.widthAnchor.constraint(equalToConstant: 16),
+            infoIconView.widthAnchor.constraint(equalTo: infoIconView.heightAnchor),
+            infoIconView.widthAnchor.constraint(equalToConstant: 16)
         ])
     }
     
     func configureViews() {
         containerStackView.axis = .horizontal
-        containerStackView.distribution = .fill
-        containerStackView.alignment = .fill
         containerStackView.spacing = 8
         
         labelsStackView.axis = .vertical
-        labelsStackView.distribution = .fill
         labelsStackView.alignment = .leading
         labelsStackView.setCustomSpacing(8, after: titleLabel)
-        labelsStackView.setCustomSpacing(4, after: airDateLabel)
+        labelsStackView.setCustomSpacing(4, after: airDateStackView)
         
         titleLabel.numberOfLines = 0
         titleLabel.font = .systemFont(ofSize: 20, weight: .semibold)
+        
+        airDateStackView.axis = .horizontal
+        airDateStackView.spacing = 4
+        airDateIconView.image = UIImage(systemName: "calendar")?
+            .withTintColor(.black, renderingMode: .alwaysOriginal)
         airDateLabel.font = .systemFont(ofSize: 13, weight: .regular)
+        
+        infoStackView.axis = .horizontal
+        infoStackView.spacing = 4
+        infoIconView.image = UIImage(systemName: "info.circle")?
+            .withTintColor(.black, renderingMode: .alwaysOriginal)
         infoLabel.font = .systemFont(ofSize: 13, weight: .regular)
     }
     
@@ -89,17 +99,7 @@ class ShowSearchResultCell: UITableViewCell, ViewCode, Reusable {
     func configure(viewModel: ShowSearchResultCellViewModel) {
         posterImageView.kf.setImage(with: viewModel.posterUrl)
         titleLabel.text = viewModel.title
-        
-        // airDateLabel text
-        let airDateString = NSMutableAttributedString()
-        airDateString.append(calendarIconString)
-        airDateString.append(NSAttributedString(string: " \(viewModel.airDate)"))
-        airDateLabel.attributedText = airDateString
-        
-        // infoLabel text
-        let infoString = NSMutableAttributedString()
-        infoString.append(infoIconString)
-        infoString.append(NSAttributedString(string: " \(viewModel.info)"))
-        infoLabel.attributedText = infoString
+        airDateLabel.text = viewModel.airDate
+        infoLabel.text = viewModel.info
     }
 }
