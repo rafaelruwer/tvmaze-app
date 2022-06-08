@@ -57,7 +57,7 @@ enum FormatterUtils {
     private static var runtimeFormatter: MeasurementFormatter = {
         let mf = MeasurementFormatter()
         mf.unitStyle = .medium
-        mf.unitOptions = .naturalScale
+        mf.unitOptions = .providedUnit
         return mf
     }()
     
@@ -70,9 +70,14 @@ enum FormatterUtils {
     
     static func removeHTMLTags(from text: String) -> String {
         let textData = Data(text.utf8)
-        let htmlString = try? NSAttributedString(data: textData,
-                                                 options: [.documentType: NSAttributedString.DocumentType.html],
-                                                 documentAttributes: nil)
+        let htmlString = try? NSAttributedString(
+            data: textData,
+            options: [
+                .documentType: NSAttributedString.DocumentType.html,
+                .characterEncoding: String.Encoding.utf8.rawValue
+            ],
+            documentAttributes: nil)
+        
         let noTagsString = htmlString?.string ?? text
         return noTagsString.trimmingCharacters(in: .whitespacesAndNewlines)
     }
