@@ -76,9 +76,12 @@ class EpisodeDetailViewController: UIViewController, ViewCode {
         summaryLabel.numberOfLines = 0
     }
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        navigationItem.title = viewModel.name
         episodeImageView.kf.setImage(with: viewModel.episodeImageUrl, options: [.onFailureImage(UIImage(named: "no-image"))])
         detailLabel.text = viewModel.seasonEpisode
         titleLabel.text = viewModel.name

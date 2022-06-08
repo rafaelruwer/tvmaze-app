@@ -67,6 +67,8 @@ class ShowDetailViewController: UIViewController, ViewCode {
         tableView.delegate = self
     }
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -76,6 +78,8 @@ class ShowDetailViewController: UIViewController, ViewCode {
             }
         
         viewModel.loadEpisodes()
+        
+        navigationItem.title = viewModel.title
     }
     
 }
@@ -83,29 +87,30 @@ class ShowDetailViewController: UIViewController, ViewCode {
 // MARK: - UITableViewDataSource
 extension ShowDetailViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        2 + viewModel.episodesBySeasons.count
+        1 + viewModel.episodesBySeasons.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section <= 1 {
-            return 1
+        if section == 0 {
+            return 2
         } else {
-            return viewModel.episodesBySeasons[section - 2].count
+            return viewModel.episodesBySeasons[section - 1].count
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.section {
-        case 0:
-            let cell: ShowDetailOverviewCell = tableView.dequeueCell(for: indexPath)
-            cell.configure(viewModel: viewModel)
-            return cell
-        case 1:
-            let cell: ShowDetailEpisodesHeaderCell = tableView.dequeueCell(for: indexPath)
-            cell.configure(isLoading: viewModel.isLoadingEpisodes)
-            return cell
-        default:
-            let cellViewModel = viewModel.episodesBySeasons[indexPath.section - 2][indexPath.row]
+        if indexPath.section == 0 {
+            if indexPath.row == 0 {
+                let cell: ShowDetailOverviewCell = tableView.dequeueCell(for: indexPath)
+                cell.configure(viewModel: viewModel)
+                return cell
+            } else {
+                let cell: ShowDetailEpisodesHeaderCell = tableView.dequeueCell(for: indexPath)
+                cell.configure(isLoading: viewModel.isLoadingEpisodes)
+                return cell
+            }
+        } else {
+            let cellViewModel = viewModel.episodesBySeasons[indexPath.section - 1][indexPath.row]
             let cell: ShowDetailEpisodeCell = tableView.dequeueCell(for: indexPath)
             cell.configure(viewModel: cellViewModel)
             return cell
@@ -116,33 +121,29 @@ extension ShowDetailViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension ShowDetailViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if section <= 1 {
+        if section == 0 {
             return nil
         }
         
         let header: ShowDetailSeasonHeader = tableView.dequeueHeaderFooter()
-        header.configure(text: viewModel.headerForSeason(section - 1))
+        header.configure(text: viewModel.headerForSeason(section))
         return header
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section <= 1 {
+        if section == 0 {
             return 0
         }
         
         return UITableView.automaticDimension
     }
     
-    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        if indexPath.section <= 1 {
-            return nil
-        }
-        
-        return indexPath
+    func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
+        indexPath.section != 0
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let episode = viewModel.episodesModels[indexPath.section - 2][indexPath.row]
+        let episode = viewModel.episodesModels[indexPath.section - 1][indexPath.row]
         coordinator?.episodeDetails(episode: episode)
         
         tableView.deselectRow(at: indexPath, animated: true)

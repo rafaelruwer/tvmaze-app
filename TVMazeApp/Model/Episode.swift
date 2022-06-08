@@ -6,6 +6,6 @@ struct Episode {
     let number: Int
     let season: Int
     let summary: String
-    let runtime: Int
+    let rating: Double?
     let image: ImageRef?
 }

@@ -50,7 +50,7 @@ class TVMazeResponseDecoder {
                        number: json["number"].intValue,
                        season: json["season"].intValue,
                        summary: json["summary"].stringValue,
-                       runtime: json["runtime"].intValue,
+                       rating: json["rating"]["average"].double,
                        image: decodeImageRef(json: json["image"]))
     }
     

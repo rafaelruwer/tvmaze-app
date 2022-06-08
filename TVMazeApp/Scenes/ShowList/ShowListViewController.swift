@@ -147,6 +147,8 @@ class ShowListViewController: UIViewController, ViewCode {
         }
     }
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

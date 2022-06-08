@@ -59,6 +59,7 @@ class ShowDetailOverviewCell: UITableViewCell, ViewCode, Reusable {
             posterImageView.widthAnchor.constraint(equalTo: posterImageView.heightAnchor, multiplier: 2/3),
             posterImageView.widthAnchor.constraint(equalTo: containerStackView.widthAnchor, multiplier: 0.42),
             
+            summaryLabel.widthAnchor.constraint(equalTo: containerStackView.widthAnchor),
             detailsStackView.widthAnchor.constraint(equalTo: containerStackView.widthAnchor),
         ])
     }
@@ -77,7 +78,7 @@ class ShowDetailOverviewCell: UITableViewCell, ViewCode, Reusable {
         yearsActiveLabel.textAlignment = .center
         
         summaryLabel.numberOfLines = 0
-        summaryLabel.font = .systemFont(ofSize: 13, weight: .regular)
+        summaryLabel.font = .systemFont(ofSize: 14, weight: .regular)
         
         detailsStackView.axis = .vertical
         detailsStackView.alignment = .leading
