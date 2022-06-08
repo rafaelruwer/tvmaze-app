@@ -3,7 +3,7 @@ import Combine
 
 class ShowListViewModel {
     
-    let service: TVMazeService
+    // MARK: Properties
     
     var update: PassthroughSubject<Void, Never> = .init()
     
@@ -12,14 +12,22 @@ class ShowListViewModel {
     var hasMorePages: Bool = true
     
     var isPerformingInitialLoad: Bool { isLoading && currentPage == 0 }
+    var showModels: [Show] { loadedShows }
     
+    // MARK: Private Properties
+    
+    private let service: TVMazeService
     private var isLoading: Bool = false
     private var loadedShows: [Show] = []
     private var currentPage: Int = -1
     
+    // MARK: - Initializer
+    
     init(service: TVMazeService) {
         self.service = service
     }
+    
+    // MARK: - Methods
     
     func loadShows() {
         guard hasMorePages, !isLoading else { return }

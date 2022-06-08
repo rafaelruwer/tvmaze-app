@@ -50,7 +50,31 @@ enum FormatterUtils {
         } else {
             return "\(releaseYear)-current"
         }
-        
+    }
+    
+    // MARK: - Runtime
+    
+    private static var runtimeFormatter: MeasurementFormatter = {
+        let mf = MeasurementFormatter()
+        mf.unitStyle = .medium
+        mf.unitOptions = .naturalScale
+        return mf
+    }()
+    
+    static func formatRuntime(_ runtime: Int) -> String {
+        let minutes = Measurement(value: Double(runtime), unit: UnitDuration.minutes)
+        return runtimeFormatter.string(from: minutes)
+    }
+    
+    // MARK: - Remove HTML tags
+    
+    static func removeHTMLTags(from text: String) -> String {
+        let textData = Data(text.utf8)
+        let htmlString = try? NSAttributedString(data: textData,
+                                                 options: [.documentType: NSAttributedString.DocumentType.html],
+                                                 documentAttributes: nil)
+        let noTagsString = htmlString?.string ?? text
+        return noTagsString.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
 }

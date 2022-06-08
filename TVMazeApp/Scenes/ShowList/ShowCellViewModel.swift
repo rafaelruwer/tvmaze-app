@@ -21,11 +21,7 @@ struct ShowCellViewModel {
     }
     
     var schedule: String {
-        if let schedule = show.schedule {
-            return FormatterUtils.formatSchedule(schedule)
-        } else {
-            return "N/A"
-        }
+        show.schedule.map(FormatterUtils.formatSchedule(_:)) ?? "No schedule"
     }
     
     var network: String {
@@ -33,7 +29,7 @@ struct ShowCellViewModel {
     }
     
     var rating: String {
-        show.rating?.formatted() ?? "N/A"
+        show.rating?.formatted() ?? "No rating"
     }
     
 }

@@ -8,12 +8,13 @@ class ShowSearchViewModel {
     let update: PassthroughSubject<Void, Never> = .init()
     var shows: [ShowSearchCellViewModel] = []
     
+    var showModels: [Show] { searchedShows }
+    
     // MARK: Private Properties
     
     private let service: TVMazeService
     private var searchQuery: CurrentValueSubject<String, Never> = .init("")
     private var searchedShows: [Show] = []
-    
     private var searchSubscription: AnyCancellable?
     
     // MARK: - Initializer
@@ -36,18 +37,18 @@ class ShowSearchViewModel {
             .filter { !$0.isEmpty }
             .removeDuplicates()
             .debounce(for: 0.5, scheduler: DispatchQueue.main)
-            .sink { [self] query in
-                service.searchShows(query: query) { [self] result in
+            .sink { [weak self] query in
+                self?.service.searchShows(query: query) { [weak self] result in
                     switch result {
                     case .success(let queriedShows):
-                        searchedShows = queriedShows
-                        shows = queriedShows.map(ShowSearchCellViewModel.init(show:))
+                        self?.searchedShows = queriedShows
+                        self?.shows = queriedShows.map(ShowSearchCellViewModel.init(show:))
                     case .failure:
-                        searchedShows = []
-                        shows = []
+                        self?.searchedShows = []
+                        self?.shows = []
                     }
                     
-                    update.send()
+                    self?.update.send()
                 }
             }
     }

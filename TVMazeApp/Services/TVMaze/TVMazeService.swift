@@ -13,19 +13,12 @@ final class TVMazeService {
         }
         
         performRequest(url: url, paginated: true, completion: completion) { [self] data in
-            DispatchQueue.global().asyncAfter(deadline: .now() + 3) {
-                if page % 2 == 0 && page != 0 {
-                    completion(.failure(TVMazeError.internal))
-                    return
-                }
-                
-                do {
-                    let json = try JSON(data: data)
-                    let shows = json.arrayValue.compactMap(responseDecoder.decodeShow(json:))
-                    completion(.success(shows))
-                } catch {
-                    completion(.failure(error))
-                }
+            do {
+                let json = try JSON(data: data)
+                let shows = json.arrayValue.compactMap(responseDecoder.decodeShow(json:))
+                completion(.success(shows))
+            } catch {
+                completion(.failure(error))
             }
         }
     }
@@ -48,15 +41,27 @@ final class TVMazeService {
     }
     
     func listEpisodes(ofShow showId: Int, completion: @escaping (Result<[Episode], Error>) -> Void) {
-        // TODO: missing implementation
-        fatalError()
+        guard let url = buildUrl(path: "/shows/\(showId)/episodes") else {
+            completion(.failure(TVMazeError.internal))
+            return
+        }
+        
+        performRequest(url: url, paginated: false, completion: completion) { [self] data in
+            do {
+                let json = try JSON(data: data)
+                let episodes = json.arrayValue.compactMap(responseDecoder.decodeEpisode(json:))
+                completion(.success(episodes))
+            } catch {
+                completion(.failure(error))
+            }
+        }
     }
     
 }
 
 extension TVMazeService {
     
-    private func buildUrl(path: String, query: [String: String]) -> URL? {
+    private func buildUrl(path: String, query: [String: String] = [:]) -> URL? {
         var urlComponents = URLComponents(url: Self.baseUrl.appendingPathComponent(path), resolvingAgainstBaseURL: false)
         urlComponents?.queryItems = query.map { URLQueryItem(name: $0, value: $1) }
         return urlComponents?.url

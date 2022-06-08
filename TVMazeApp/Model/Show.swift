@@ -7,6 +7,7 @@ struct Show: Equatable {
     
     let genres: [String]
     let schedule: Schedule?
+    let runtime: Int
     let network: String
     let releaseDate: Date
     let endDate: Date?

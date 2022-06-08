@@ -5,8 +5,10 @@ class ShowListViewController: UIViewController, ViewCode {
     
     // MARK: Properties
     
-    let viewModel: ShowListViewModel
-    private var subscriptions: Set<AnyCancellable> = []
+    var coordinator: MainCoordinator?
+    
+    private let viewModel: ShowListViewModel
+    private var viewModelSubscription: AnyCancellable?
     
     // MARK: - Views
     
@@ -148,12 +150,11 @@ class ShowListViewController: UIViewController, ViewCode {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel.update.receive(on: DispatchQueue.main)
+        viewModelSubscription = viewModel.update.receive(on: DispatchQueue.main)
             .prepend(())
-            .sink { _ in
-                self.updateView()
+            .sink { [weak self] _ in
+                self?.updateView()
             }
-            .store(in: &subscriptions)
         
         viewModel.loadShows()
     }
@@ -211,7 +212,8 @@ extension ShowListViewController: UITableViewDataSource {
 // MARK: - UITableViewDelegate
 extension ShowListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("selected", indexPath)
+        let show = viewModel.showModels[indexPath.row]
+        coordinator?.showDetails(show: show)
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
