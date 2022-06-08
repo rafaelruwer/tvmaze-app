@@ -7,16 +7,11 @@ class ShowSearchCell: UITableViewCell, ViewCode, Reusable {
     
     private let containerStackView = UIStackView()
     private let posterImageView = UIImageView()
-    private let labelsStackView = UIStackView()
+    
+    private let detailsStackView = UIStackView()
     private let titleLabel = UILabel()
-    
-    private let airDateStackView = UIStackView()
-    private let airDateIconView = UIImageView()
-    private let airDateLabel = UILabel()
-    
-    private let infoStackView = UIStackView()
-    private let infoIconView = UIImageView()
-    private let infoLabel = UILabel()
+    private let yearsActiveView = IconTextView()
+    private let extraInfoView = IconTextView()
     
     // MARK: - Initializers
     
@@ -34,17 +29,11 @@ class ShowSearchCell: UITableViewCell, ViewCode, Reusable {
     func buildHierarchy() {
         contentView.addSubview(containerStackView)
         containerStackView.addArrangedSubview(posterImageView)
-        containerStackView.addArrangedSubview(labelsStackView)
+        containerStackView.addArrangedSubview(detailsStackView)
         
-        labelsStackView.addArrangedSubview(titleLabel)
-        labelsStackView.addArrangedSubview(airDateStackView)
-        labelsStackView.addArrangedSubview(infoStackView)
-        
-        airDateStackView.addArrangedSubview(airDateIconView)
-        airDateStackView.addArrangedSubview(airDateLabel)
-        
-        infoStackView.addArrangedSubview(infoIconView)
-        infoStackView.addArrangedSubview(infoLabel)
+        detailsStackView.addArrangedSubview(titleLabel)
+        detailsStackView.addArrangedSubview(yearsActiveView)
+        detailsStackView.addArrangedSubview(extraInfoView)
     }
     
     func setupConstraints() {
@@ -61,12 +50,6 @@ class ShowSearchCell: UITableViewCell, ViewCode, Reusable {
             
             posterImageView.widthAnchor.constraint(equalTo: posterImageView.heightAnchor, multiplier: 2/3),
             posterHeight,
-            
-            airDateIconView.widthAnchor.constraint(equalTo: airDateIconView.heightAnchor),
-            airDateIconView.widthAnchor.constraint(equalToConstant: 20),
-            
-            infoIconView.widthAnchor.constraint(equalTo: infoIconView.heightAnchor),
-            infoIconView.widthAnchor.constraint(equalToConstant: 20)
         ])
     }
     
@@ -74,25 +57,22 @@ class ShowSearchCell: UITableViewCell, ViewCode, Reusable {
         containerStackView.axis = .horizontal
         containerStackView.spacing = 8
         
-        labelsStackView.axis = .vertical
-        labelsStackView.alignment = .leading
-        labelsStackView.setCustomSpacing(8, after: titleLabel)
-        labelsStackView.setCustomSpacing(4, after: airDateStackView)
+        detailsStackView.axis = .vertical
+        detailsStackView.alignment = .leading
+        detailsStackView.setCustomSpacing(8, after: titleLabel)
+        detailsStackView.setCustomSpacing(4, after: yearsActiveView)
         
         titleLabel.numberOfLines = 0
         titleLabel.font = .systemFont(ofSize: 20, weight: .semibold)
         
-        airDateStackView.axis = .horizontal
-        airDateStackView.spacing = 4
-        airDateIconView.image = UIImage(systemName: "calendar")?
-            .withTintColor(.black, renderingMode: .alwaysOriginal)
-        airDateLabel.font = .systemFont(ofSize: 14, weight: .regular)
+        [yearsActiveView, extraInfoView].forEach { detailView in
+            detailView.iconSize = 20
+            detailView.fontSize = 14
+            detailView.spacing = 4
+        }
         
-        infoStackView.axis = .horizontal
-        infoStackView.spacing = 4
-        infoIconView.image = UIImage(systemName: "info.circle")?
-            .withTintColor(.black, renderingMode: .alwaysOriginal)
-        infoLabel.font = .systemFont(ofSize: 14, weight: .regular)
+        yearsActiveView.icon = UIImage(systemName: "calendar")
+        extraInfoView.icon = UIImage(systemName: "info.circle")
     }
     
     // MARK: - Configuration
@@ -100,7 +80,7 @@ class ShowSearchCell: UITableViewCell, ViewCode, Reusable {
     func configure(viewModel: ShowSearchCellViewModel) {
         posterImageView.kf.setImage(with: viewModel.posterUrl)
         titleLabel.text = viewModel.title
-        airDateLabel.text = viewModel.airDate
-        infoLabel.text = viewModel.info
+        yearsActiveView.text = viewModel.airDate
+        extraInfoView.text = viewModel.info
     }
 }
