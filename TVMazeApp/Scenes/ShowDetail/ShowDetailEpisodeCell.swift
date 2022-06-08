@@ -6,14 +6,11 @@ class ShowDetailEpisodeCell: UITableViewCell, ViewCode, Reusable {
     // MARK: Views
     
     private let containerStackView = UIStackView()
-    private let imageLabelsStackView = UIStackView()
-    private let summaryLabel = UILabel()
-    
     private let episodeImageView = UIImageView()
     
     private let labelsStackView = UIStackView()
     private let titleLabel = UILabel()
-    private let runtimeLabel = UILabel()
+    private let ratingView = IconTextView()
     
     // MARK: - Initializers
     
@@ -31,18 +28,18 @@ class ShowDetailEpisodeCell: UITableViewCell, ViewCode, Reusable {
     func buildHierarchy() {
         contentView.addSubview(containerStackView)
         
-        containerStackView.addArrangedSubview(imageLabelsStackView)
-        containerStackView.addArrangedSubview(summaryLabel)
-        
-        imageLabelsStackView.addArrangedSubview(episodeImageView)
-        imageLabelsStackView.addArrangedSubview(labelsStackView)
+        containerStackView.addArrangedSubview(episodeImageView)
+        containerStackView.addArrangedSubview(labelsStackView)
         
         labelsStackView.addArrangedSubview(titleLabel)
-        labelsStackView.addArrangedSubview(runtimeLabel)
+        labelsStackView.addArrangedSubview(ratingView)
     }
     
     func setupConstraints() {
         containerStackView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let imageWidth = episodeImageView.widthAnchor.constraint(equalToConstant: 150)
+        imageWidth.priority = .init(rawValue: 999)
         
         NSLayoutConstraint.activate([
             containerStackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
@@ -51,7 +48,7 @@ class ShowDetailEpisodeCell: UITableViewCell, ViewCode, Reusable {
             containerStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
             
             episodeImageView.widthAnchor.constraint(equalTo: episodeImageView.heightAnchor, multiplier: 16/9),
-            episodeImageView.widthAnchor.constraint(equalToConstant: 150),
+            imageWidth,
         ])
     }
     
@@ -59,19 +56,21 @@ class ShowDetailEpisodeCell: UITableViewCell, ViewCode, Reusable {
         containerStackView.axis = .vertical
         containerStackView.spacing = 8
         
-        imageLabelsStackView.axis = .horizontal
-        imageLabelsStackView.alignment = .center
-        imageLabelsStackView.spacing = 12
+        containerStackView.axis = .horizontal
+        containerStackView.alignment = .center
+        containerStackView.spacing = 12
         
         labelsStackView.axis = .vertical
         labelsStackView.alignment = .leading
         labelsStackView.spacing = 8
         
         titleLabel.font = .systemFont(ofSize: 16, weight: .semibold)
-        runtimeLabel.font = .systemFont(ofSize: 14, weight: .regular)
+        titleLabel.numberOfLines = 0
         
-        summaryLabel.font = .systemFont(ofSize: 14, weight: .regular)
-        summaryLabel.numberOfLines = 0
+        ratingView.icon = UIImage(systemName: "star")
+        ratingView.iconSize = 22
+        ratingView.fontSize = 14
+        ratingView.spacing = 4
     }
     
     // MARK: - Configuration
@@ -80,8 +79,7 @@ class ShowDetailEpisodeCell: UITableViewCell, ViewCode, Reusable {
         episodeImageView.kf.setImage(with: viewModel.imageUrl, options: [.onFailureImage(UIImage(named: "no-image"))])
         
         titleLabel.text = viewModel.title
-        runtimeLabel.text = viewModel.runtime
-        summaryLabel.text = viewModel.description
+        ratingView.text = viewModel.rating
     }
     
 }

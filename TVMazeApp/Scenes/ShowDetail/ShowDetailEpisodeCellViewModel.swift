@@ -16,12 +16,8 @@ struct ShowDetailEpisodeCellViewModel {
         "\(episode.number) - \(episode.name)"
     }
     
-    var runtime: String {
-        FormatterUtils.formatRuntime(episode.runtime)
-    }
-    
-    var description: String {
-        FormatterUtils.removeHTMLTags(from: episode.summary)
+    var rating: String {
+        episode.rating?.formatted() ?? "No rating"
     }
 }
 
