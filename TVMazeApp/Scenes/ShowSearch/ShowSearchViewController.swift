@@ -61,6 +61,8 @@ class ShowSearchViewController: UIViewController, ViewCode {
         tableView.delegate = self
     }
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

@@ -67,6 +67,8 @@ class ShowDetailViewController: UIViewController, ViewCode {
         tableView.delegate = self
     }
     
+    // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -76,6 +78,8 @@ class ShowDetailViewController: UIViewController, ViewCode {
             }
         
         viewModel.loadEpisodes()
+        
+        navigationItem.title = viewModel.title
     }
     
 }
