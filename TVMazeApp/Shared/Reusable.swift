@@ -24,4 +24,19 @@ extension UITableView {
         
         return reusableCell
     }
+    
+    func register<HeaderFooter: Reusable>(headerFooter: HeaderFooter.Type) {
+        register(HeaderFooter.self, forHeaderFooterViewReuseIdentifier: HeaderFooter.identifier)
+    }
+    
+    func dequeueHeaderFooter<HeaderFooter: Reusable>(type: HeaderFooter.Type = HeaderFooter.self) -> HeaderFooter {
+        guard let reusableHeaderFooter = dequeueReusableHeaderFooterView(withIdentifier: HeaderFooter.identifier) as? HeaderFooter else {
+            fatalError("""
+                Failed to dequeue header/footer of type '\(type)' with identifier '\(HeaderFooter.identifier)'
+                for on tableView \(self). Make sure you registered the header/footer before dequeueing.
+                """)
+        }
+        
+        return reusableHeaderFooter
+    }
 }

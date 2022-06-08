@@ -25,7 +25,8 @@ final class MainCoordinator {
     }
     
     func showDetails(show: Show) {
-        let viewModel = ShowDetailViewModel(show: show)
+        let service = TVMazeService()
+        let viewModel = ShowDetailViewModel(service: service, show: show)
         let viewController = ShowDetailViewController(viewModel: viewModel)
         
         navigationController.pushViewController(viewController, animated: true)

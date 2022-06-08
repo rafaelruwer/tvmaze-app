@@ -1,12 +1,11 @@
 import Foundation
+import Combine
 
 class ShowDetailViewModel {
     
-    private let show: Show
+    // MARK: Properties
     
-    init(show: Show) {
-        self.show = show
-    }
+    var update: PassthroughSubject<Void, Never> = .init()
     
     var posterUrl: URL {
         show.poster.original
@@ -25,13 +24,7 @@ class ShowDetailViewModel {
     }
     
     var description: String {
-        // remove html tags before returning
-        let textData = Data(show.summary.utf8)
-        let htmlString = try? NSAttributedString(data: textData,
-                                                 options: [.documentType: NSAttributedString.DocumentType.html],
-                                                 documentAttributes: nil)
-        let noTagsString = htmlString?.string ?? show.summary
-        return noTagsString.trimmingCharacters(in: .whitespacesAndNewlines)
+        FormatterUtils.removeHTMLTags(from: show.summary)
     }
     
     var schedule: String {
@@ -39,7 +32,7 @@ class ShowDetailViewModel {
     }
     
     var runtime: String {
-        "60 min"
+        FormatterUtils.formatRuntime(show.runtime)
     }
     
     var network: String {
@@ -48,6 +41,55 @@ class ShowDetailViewModel {
     
     var rating: String {
         show.rating?.formatted() ?? "No rating"
+    }
+    
+    var episodesBySeasons: [[ShowDetailEpisodeCellViewModel]] = []
+    var isLoadingEpisodes: Bool = false
+    
+    var episodesModels: [[Episode]] { allEpisodes }
+    
+    // MARK: Private Properties
+    
+    private let service: TVMazeService
+    private let show: Show
+    private var allEpisodes: [[Episode]] = []
+    
+    // MARK: - Initializers
+    
+    init(service: TVMazeService, show: Show) {
+        self.service = service
+        self.show = show
+    }
+    
+    // MARK: - Methods
+    
+    func loadEpisodes() {
+        guard !isLoadingEpisodes else { return }
+        
+        isLoadingEpisodes = true
+        update.send()
+        
+        service.listEpisodes(ofShow: show.id) { [self] result in
+            switch result {
+            case .success(let loadedEpisodes):
+                let groupedBySeason = Dictionary(grouping: loadedEpisodes, by: \.season)
+                    .sorted { $0.key < $1.key }
+                    .map(\.value)
+                
+                allEpisodes = groupedBySeason
+                episodesBySeasons = groupedBySeason.map { $0.map(ShowDetailEpisodeCellViewModel.init(episode:)) }
+            case .failure:
+                allEpisodes = []
+                episodesBySeasons = []
+            }
+            
+            isLoadingEpisodes = false
+            update.send()
+        }
+    }
+    
+    func headerForSeason(_ season: Int) -> String {
+        "Season \(season)"
     }
     
 }
