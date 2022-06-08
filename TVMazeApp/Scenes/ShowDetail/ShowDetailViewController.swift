@@ -44,6 +44,8 @@ class ShowDetailViewController: UIViewController, ViewCode {
     }
     
     func configureViews() {
+        navigationItem.largeTitleDisplayMode = .never
+        
         view.backgroundColor = .systemBackground
         
         tableView.backgroundColor = .clear
@@ -51,8 +53,10 @@ class ShowDetailViewController: UIViewController, ViewCode {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 200
         
-//        tableView.dataSource = self
-//        tableView.delegate = self
+        tableView.register(cell: ShowDetailOverviewCell.self)
+        
+        tableView.dataSource = self
+        tableView.delegate = self
     }
     
 }
@@ -60,15 +64,17 @@ class ShowDetailViewController: UIViewController, ViewCode {
 // MARK: - UITableViewDataSource
 extension ShowDetailViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
-        fatalError()
+        1
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        fatalError()
+        1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        fatalError()
+        let cell: ShowDetailOverviewCell = tableView.dequeueCell(for: indexPath)
+        cell.configure(viewModel: viewModel)
+        return cell
     }
 }
 

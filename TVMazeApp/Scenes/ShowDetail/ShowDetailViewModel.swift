@@ -24,12 +24,14 @@ class ShowDetailViewModel {
         show.genres
     }
     
-    var description: NSAttributedString {
+    var description: String {
+        // remove html tags before returning
         let textData = Data(show.summary.utf8)
         let htmlString = try? NSAttributedString(data: textData,
                                                  options: [.documentType: NSAttributedString.DocumentType.html],
                                                  documentAttributes: nil)
-        return htmlString ?? NSAttributedString(string: show.summary)
+        let noTagsString = htmlString?.string ?? show.summary
+        return noTagsString.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
     var schedule: String {
