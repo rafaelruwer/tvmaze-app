@@ -65,8 +65,8 @@ class ShowSearchViewController: UIViewController, ViewCode {
         super.viewDidLoad()
         
         viewModelSubscription = viewModel.update.receive(on: DispatchQueue.main)
-            .sink { _ in
-                self.tableView.reloadData()
+            .sink { [weak self] _ in
+                self?.tableView.reloadData()
             }
     }
     

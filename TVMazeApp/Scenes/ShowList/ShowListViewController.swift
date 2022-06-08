@@ -8,7 +8,7 @@ class ShowListViewController: UIViewController, ViewCode {
     var coordinator: MainCoordinator?
     
     private let viewModel: ShowListViewModel
-    private var subscriptions: Set<AnyCancellable> = []
+    private var viewModelSubscription: AnyCancellable?
     
     // MARK: - Views
     
@@ -150,12 +150,11 @@ class ShowListViewController: UIViewController, ViewCode {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel.update.receive(on: DispatchQueue.main)
+        viewModelSubscription = viewModel.update.receive(on: DispatchQueue.main)
             .prepend(())
-            .sink { _ in
-                self.updateView()
+            .sink { [weak self] _ in
+                self?.updateView()
             }
-            .store(in: &subscriptions)
         
         viewModel.loadShows()
     }
