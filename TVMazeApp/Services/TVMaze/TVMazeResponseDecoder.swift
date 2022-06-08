@@ -12,7 +12,8 @@ class TVMazeResponseDecoder {
     func decodeShow(json: JSON) -> Show? {
         guard let id = json["id"].int,
               let title = json["name"].string,
-              let poster = decodeImageRef(json: json["image"]) else {
+              let poster = decodeImageRef(json: json["image"])
+        else {
             return nil
         }
         
@@ -37,6 +38,20 @@ class TVMazeResponseDecoder {
                     endDate: endDate,
                     rating: json["rating"]["average"].double,
                     poster: poster)
+    }
+    
+    func decodeEpisode(json: JSON) -> Episode? {
+        guard let id = json["id"].int, let name = json["name"].string else {
+            return nil
+        }
+        
+        return Episode(id: id,
+                       name: name,
+                       number: json["number"].intValue,
+                       season: json["season"].intValue,
+                       summary: json["summary"].stringValue,
+                       runtime: json["runtime"].intValue,
+                       image: decodeImageRef(json: json["image"]))
     }
     
     func decodeImageRef(json: JSON) -> ImageRef? {
