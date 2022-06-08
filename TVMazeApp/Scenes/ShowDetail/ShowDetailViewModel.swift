@@ -19,8 +19,8 @@ class ShowDetailViewModel {
         FormatterUtils.formatYearsActive(releaseDate: show.releaseDate, endDate: show.endDate)
     }
     
-    var genresTags: [String] {
-        show.genres
+    var genres: String {
+        show.genres.joined(separator: ", ")
     }
     
     var description: String {

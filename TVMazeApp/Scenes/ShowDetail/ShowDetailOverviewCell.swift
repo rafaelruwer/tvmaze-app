@@ -12,6 +12,7 @@ class ShowDetailOverviewCell: UITableViewCell, ViewCode, Reusable {
     private let summaryLabel = UILabel()
     
     private let detailsStackView = UIStackView()
+    private let genresView = IconTextView()
     private let scheduleView = IconTextView()
     private let runtimeView = IconTextView()
     private let networkView = IconTextView()
@@ -39,6 +40,7 @@ class ShowDetailOverviewCell: UITableViewCell, ViewCode, Reusable {
         containerStackView.addArrangedSubview(summaryLabel)
         containerStackView.addArrangedSubview(detailsStackView)
         
+        detailsStackView.addArrangedSubview(genresView)
         detailsStackView.addArrangedSubview(scheduleView)
         detailsStackView.addArrangedSubview(runtimeView)
         detailsStackView.addArrangedSubview(networkView)
@@ -81,12 +83,13 @@ class ShowDetailOverviewCell: UITableViewCell, ViewCode, Reusable {
         detailsStackView.alignment = .leading
         detailsStackView.spacing = 4
         
-        [scheduleView, runtimeView, networkView, ratingView].forEach { detailView in
+        [genresView, scheduleView, runtimeView, networkView, ratingView].forEach { detailView in
             detailView.iconSize = 24
             detailView.fontSize = 16
             detailView.spacing = 8
         }
         
+        genresView.icon = UIImage(named: "genre")
         scheduleView.icon = UIImage(systemName: "calendar")
         runtimeView.icon = UIImage(systemName: "clock")
         networkView.icon = UIImage(systemName: "tv")
@@ -100,6 +103,7 @@ class ShowDetailOverviewCell: UITableViewCell, ViewCode, Reusable {
         titleLabel.text = viewModel.title
         yearsActiveLabel.text = viewModel.yearsActive
         summaryLabel.text = viewModel.description
+        genresView.text = viewModel.genres
         scheduleView.text = viewModel.schedule
         runtimeView.text = viewModel.runtime
         networkView.text = viewModel.network
