@@ -5,6 +5,8 @@ class ShowDetailViewController: UIViewController, ViewCode {
     
     // MARK: Properties
     
+    var coordinator: MainCoordinator?
+    
     private let viewModel: ShowDetailViewModel
     private var viewModelSubscription: AnyCancellable?
     
@@ -131,8 +133,17 @@ extension ShowDetailViewController: UITableViewDelegate {
         return UITableView.automaticDimension
     }
     
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        if indexPath.section <= 1 {
+            return nil
+        }
+        
+        return indexPath
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("selected", indexPath)
+        let episode = viewModel.episodesModels[indexPath.section - 2][indexPath.row]
+        coordinator?.episodeDetails(episode: episode)
         
         tableView.deselectRow(at: indexPath, animated: true)
     }

@@ -28,6 +28,14 @@ final class MainCoordinator {
         let service = TVMazeService()
         let viewModel = ShowDetailViewModel(service: service, show: show)
         let viewController = ShowDetailViewController(viewModel: viewModel)
+        viewController.coordinator = self
+        
+        navigationController.pushViewController(viewController, animated: true)
+    }
+    
+    func episodeDetails(episode: Episode) {
+        let viewModel = EpisodeDetailViewModel(episode: episode)
+        let viewController = EpisodeDetailViewController(viewModel: viewModel)
         
         navigationController.pushViewController(viewController, animated: true)
     }
