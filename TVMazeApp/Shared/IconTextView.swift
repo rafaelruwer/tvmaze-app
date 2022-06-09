@@ -56,7 +56,7 @@ class IconTextView: UIView, ViewCode {
             iconImageView.image
         }
         set {
-            iconImageView.image = newValue?.withTintColor(.black, renderingMode: .alwaysOriginal)
+            iconImageView.image = newValue?.withTintColor(.label, renderingMode: .alwaysOriginal)
         }
     }
     

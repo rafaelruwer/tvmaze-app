@@ -41,8 +41,8 @@ class ShowListViewModel {
         service.listShows(page: currentPage) { [self] result in
             switch result {
             case .success(let pageShows):
-                loadedShows.append(contentsOf: pageShows[..<10])
-                shows.append(contentsOf: pageShows[..<10].map(ShowCellViewModel.init(show:)))
+                loadedShows.append(contentsOf: pageShows)
+                shows.append(contentsOf: pageShows.map(ShowCellViewModel.init(show:)))
             case .failure(let error):
                 if case TVMazeError.noMorePages = error {
                     hasMorePages = false
